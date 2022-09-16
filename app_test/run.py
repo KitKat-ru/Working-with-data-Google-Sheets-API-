@@ -1,6 +1,6 @@
 from pprint import pprint
 
-from db.psql_management import db_create_table, db_login, db_ping, db_populate
+from db.psql_management import db_create_table, db_login, db_ping, db_populate, db_show
 from detail import api_auth
 from detail.work_sheets import formatting_value, values_read
 
@@ -10,8 +10,9 @@ from detail.work_sheets import formatting_value, values_read
 
 if __name__ == "__main__":
     db_ping()
-    db_create_table()
+    # db_create_table()
     # pprint(values_read(api_auth.spreadsheet_id, 'Лист1')['values'][1:])
-    data_sheets = values_read(api_auth.spreadsheet_id, 'Лист1')['values'][1:]
-    formatting = formatting_value(data_sheets)
-    db_populate(formatting)
+    # data_sheets = values_read(api_auth.spreadsheet_id, 'Лист1')['values'][1:]
+    # formatting = formatting_value(data_sheets)
+    # db_populate(formatting)
+    db_show()

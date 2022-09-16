@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 
 import psycopg2
 from dotenv import load_dotenv
@@ -57,7 +58,7 @@ def db_create_table():
             f'CREATE TABLE IF NOT EXISTS {TABLE_NAME}('
             f'id INTEGER PRIMARY KEY,'
             f'delivery INTEGER,'
-            f'Price_usd INTEGER,'
+            f'price_usd INTEGER,'
             f'delivery_date DATE,'
             f'price_rub NUMERIC (36,2)'
             f');'
@@ -88,6 +89,32 @@ def db_populate(data_sheets):
         cursor.executemany(sql_request, vars_list=data_sheets)
         connection.commit()
         print(f'Таблица {TABLE_NAME} успешно обновлена в PostgreSQL')
+    except (Exception, Error) as error:
+        print('Ошибка при работе с PostgreSQL', error)
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print('Соединение с PostgreSQL закрыто')
+
+
+def db_show():
+    """
+    Выводит информацию из таблицы PSQL ранее сохраненную из API Google Sheets.
+    """
+    try:
+        connection = db_login()
+        cursor = connection.cursor()
+        cursor.execute(
+            f'SELECT id, '
+            f'       delivery, '
+            f'       price_usd, '
+            f'       price_rub, '
+            f'       delivery_date '
+            f'FROM   {TABLE_NAME}'
+        )
+        record = cursor.fetchall()
+        pprint(record)
     except (Exception, Error) as error:
         print('Ошибка при работе с PostgreSQL', error)
     finally:
