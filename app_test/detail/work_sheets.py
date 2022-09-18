@@ -1,9 +1,25 @@
-import datetime
+import googleapiclient.discovery
+import httplib2
+from oauth2client.service_account import ServiceAccountCredentials
 
-from detail.api_auth import service, usd_rate
+# Токены для service_account в Google Cloud
+CREDENTIALS_FILE = 'creads.json'
 
-USD_ID = 'R01235'
-DT_NOW = datetime.datetime.now()
+# Получение доступа к API Google Sheets
+credentials = ServiceAccountCredentials.from_json_keyfile_name(
+    CREDENTIALS_FILE,
+    [
+        'https://www.googleapis.com/auth/spreadsheets',
+        'https://www.googleapis.com/auth/drive',
+    ]
+)
+
+httpAuth = credentials.authorize(httplib2.Http())
+service = googleapiclient.discovery.build(
+    serviceName='sheets',
+    version='v4',
+    http=httpAuth,
+)
 
 
 def values_read(sheet_id, range, position='ROWS'):
@@ -34,24 +50,3 @@ def values_write(sheet_id, range, position='COLUMNS', *args):
             ]
         }
     ).execute()
-
-
-# data = [
-#     ['45', '1786437', '618', '28.05.2022'],
-#     ['46', '1485012', '1124', '09.05.2022'],
-#     ['47', '1741017', '514', '16.05.2022'],
-#     ['48', '1497493', '1198', '30.05.2022'],
-#     ['49', '1877503', '1204', '29.05.2022'],
-#     ['50', '1426726', '1997', '20.05.2022'],
-# ]
-
-def formatting_value(data_sheets):
-    """Добавляет дополнительную колонку с ценой в рублях."""
-    rate = usd_rate(DT_NOW, USD_ID)
-
-    for arr in data_sheets:
-        rub_rate = int(arr[2]) * float(rate)
-        arr.append(str(rub_rate))
-    return data_sheets
-
-# formatting_value(data)
