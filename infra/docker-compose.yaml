@@ -9,7 +9,10 @@ services:
       - ./.env
   app:
     # image: taeray/testcase_kanal:v1.0
-    build: ../app_test/
+    # build: ../app_test/
+    build: 
+      context: ../
+      dockerfile: ./app_test/Dockerfile
     restart: always
     command: >
       sh -c "python main.py"
@@ -32,7 +35,7 @@ services:
   #     - media_value:/var/html/media/
 
   #   depends_on:
-  #     - web
+  #     - app
 
 volumes:
   static_value:

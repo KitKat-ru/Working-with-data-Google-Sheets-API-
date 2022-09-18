@@ -175,3 +175,31 @@ def db_show_table(tokens, table_name):
             cursor.close()
             connection.close()
             logger.info('Соединение с PostgreSQL закрыто')
+
+
+def db_show_table_expired_orders(tokens, table_name):
+    """
+    Выводит информацию из таблицы PSQL ранее сохраненную из API Google Sheets.
+    """
+    try:
+        connection = db_login(tokens)
+        cursor = connection.cursor()
+        cursor.execute(
+            f'SELECT id, '
+            f'       delivery, '
+            f'       price_usd, '
+            f'       price_rub, '
+            f'       delivery_date '
+            f'FROM   {table_name} '
+            f'WHERE  delivery_date::date < now();'
+        )
+        record = cursor.fetchall()
+        logger.info(f'Таблица {table_name} успешно выведена для чтения')
+        pprint(record)
+    except (Exception, Error) as error:
+        logger.debug('Ошибка при работе с PostgreSQL', error)
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            logger.info('Соединение с PostgreSQL закрыто')

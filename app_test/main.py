@@ -6,8 +6,8 @@ from logging.handlers import RotatingFileHandler
 
 from cbrf.models import DailyCurrenciesRates
 from db.psql_management import (db_create_table, db_delete_table, db_ping,
-                                db_populate, db_show_table,
-                                db_style_change_date)
+                                db_populate, db_show_table_expired_orders,
+                                db_style_change_date, db_show_table)
 from detail.work_sheets import values_read
 from dotenv import load_dotenv
 
@@ -97,6 +97,7 @@ def main():
             formatting = formatting_value(data_sheets)
             db_populate(formatting, TOKEN_DICT, TABLE_NAME)
             db_show_table(TOKEN_DICT, TABLE_NAME)
+            db_show_table_expired_orders(TOKEN_DICT, TABLE_NAME)
             time.sleep(RETRY_TIME)
         except Exception as error:
             logger.error(f'Произошел сбой в программе, Ошибка - {error}!')
