@@ -1,7 +1,7 @@
 <h1 align="center">Привет, меня зовут <a href="https://t.me/Taeray" target="_blank">Артем</a> 
 <img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" height="32"/></h1>
 <h3 align="center">Начинающий Python Developer, прошел курсы Яндекс.Практикума</h3>
-<h3 align="center">Тестовое задание №2</h3>
+<h3 align="center">Working-with-data-Google-Sheets-API</h3>
 
 ### Описание: ###
 
